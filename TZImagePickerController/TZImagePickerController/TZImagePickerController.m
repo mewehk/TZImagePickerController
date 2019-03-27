@@ -680,6 +680,10 @@
     }
 }
 
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 @end
 
 
@@ -813,6 +817,10 @@
     photoPickerVc.model = model;
     [self.navigationController pushViewController:photoPickerVc animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 #pragma clang diagnostic pop

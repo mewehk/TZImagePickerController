@@ -982,6 +982,11 @@ static CGFloat itemMargin = 5;
     }
     return indexPaths;
 }
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 #pragma clang diagnostic pop
 
 @end
