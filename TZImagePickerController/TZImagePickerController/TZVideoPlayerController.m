@@ -123,7 +123,7 @@
     [self.view addSubview:_toolBar];
     
     if (tzImagePickerVc.videoPreviewPageUIConfigBlock) {
-        tzImagePickerVc.videoPreviewPageUIConfigBlock(_playButton, _toolBar, _doneButton);
+        tzImagePickerVc.videoPreviewPageUIConfigBlock(_playButton, _toolBar, _doneButton, self);
     }
 }
 
