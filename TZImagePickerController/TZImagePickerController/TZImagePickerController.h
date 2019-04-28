@@ -89,6 +89,14 @@
 @property (nonatomic, assign) BOOL allowTakePicture;
 @property (nonatomic, assign) BOOL allowCameraLocation;
 
+/// Default is NO / 默认是原版本弹出提示框
+/// 如果设置成YES 当存在照片和视频 选照片的时候显示视频遮罩让其不可选
+@property (nonatomic, assign) BOOL showVideoDeSelectLayer;
+
+/**
+ 最大视频长度，超过则不显示
+ */
+@property (assign, nonatomic) NSTimeInterval videoMaxLength;
 /// Default is YES, if set NO, user can't take video.
 /// 默认为YES，如果设置为NO, 用户将不能拍摄视频
 @property(nonatomic, assign) BOOL allowTakeVideo;
@@ -134,6 +142,7 @@
 /// 默认是NO，如果设置为YES，导出视频时会修正转向（慎重设为YES，可能导致部分安卓下拍的视频导出失败）
 @property (assign, nonatomic) BOOL needFixComposition;
 
+- (void)configDefaultSetting;
 /// The photos user have selected
 /// 用户选中过的图片数组
 @property (nonatomic, strong) NSMutableArray *selectedAssets;
@@ -154,6 +163,17 @@
 /// statusBar的样式，默认为UIStatusBarStyleLightContent
 @property (assign, nonatomic) UIStatusBarStyle statusBarStyle;
 
+
+/**
+ collectionView 向上延伸到顶
+ */
+@property (nonatomic, assign) BOOL extendNavigationBar;
+
+/**
+ collectionView 向下延伸到底
+ */
+@property (nonatomic, assign) BOOL extendBottomBar;
+
 #pragma mark -
 /// Single selection mode, valid when maxImagesCount = 1
 /// 单选模式,maxImagesCount为1时才生效
@@ -168,7 +188,7 @@
 @property (nonatomic, copy) void (^navLeftBarButtonSettingBlock)(UIButton *leftButton);     ///< 自定义返回按钮样式及其属性
 
 /// 【自定义各页面/组件的样式】在界面初始化/组件setModel完成后调用，允许外界修改样式等
-@property (nonatomic, copy) void (^photoPickerPageUIConfigBlock)(UICollectionView *collectionView, UIView *bottomToolBar, UIButton *previewButton, UIButton *originalPhotoButton, UILabel *originalPhotoLabel, UIButton *doneButton, UIImageView *numberImageView, UILabel *numberLabel, UIView *divideLine);
+@property (nonatomic, copy) void (^photoPickerPageUIConfigBlock)(UICollectionView *collectionView, UIView *bottomToolBar, UIButton *previewButton, UIButton *originalPhotoButton, UILabel *originalPhotoLabel, UIButton *doneButton, UIImageView *numberImageView, UILabel *numberLabel, UIView *divideLine, UIViewController *photoPicker);
 @property (nonatomic, copy) void (^photoPreviewPageUIConfigBlock)(UICollectionView *collectionView, UIView *naviBar, UIButton *backButton, UIButton *selectButton, UILabel *indexLabel, UIView *toolBar, UIButton *originalPhotoButton, UILabel *originalPhotoLabel, UIButton *doneButton, UIImageView *numberImageView, UILabel *numberLabel);
 @property (nonatomic, copy) void (^videoPreviewPageUIConfigBlock)(UIButton *playButton, UIView *toolBar, UIButton *doneButton);
 @property (nonatomic, copy) void (^gifPreviewPageUIConfigBlock)(UIView *toolBar, UIButton *doneButton);
@@ -222,6 +242,12 @@
 @property (nonatomic, copy) NSString *fullImageBtnTitleStr;
 @property (nonatomic, copy) NSString *settingBtnTitleStr;
 @property (nonatomic, copy) NSString *processHintStr;
+
+/**
+ 最大数提示文案 e.g "max count %zd"
+ */
+@property (nonatomic, copy) NSString *maxCountLimitStr;
+
 
 /// Icon theme color, default is green color like wechat, the value is r:31 g:185 b:34. Currently only support image selection icon when showSelectedIndex is YES. If you need it, please set it as soon as possible
 /// icon主题色，默认是微信的绿色，值是r:31 g:185 b:34。目前仅支持showSelectedIndex为YES时的图片选中icon。如需要，请尽早设置它。

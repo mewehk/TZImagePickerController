@@ -14,6 +14,22 @@
 @property (nonatomic, assign) BOOL isFirstAppear;
 @property (nonatomic, assign) NSInteger columnNumber;
 @property (nonatomic, strong) TZAlbumModel *model;
+
+/**
+ 重置状态
+ */
+- (void)reset;
+
+/**
+ 获取改相册下的asset
+ */
+- (void)fetchAssetModels;
+
+/**
+ 完成按钮点击
+ */
+- (void)doneButtonClick;
+
 @end
 
 
