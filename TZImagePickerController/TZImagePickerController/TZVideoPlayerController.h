@@ -14,5 +14,6 @@
 @property (nonatomic, strong) TZAssetModel *model;
 
 - (void)doneButtonClick;
+- (void)pausePlayerAndShowNaviBar;
 
 @end
