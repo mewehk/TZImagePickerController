@@ -110,7 +110,7 @@
     [_backButton addTarget:self action:@selector(backButtonClick) forControlEvents:UIControlEventTouchUpInside];
     
     _selectButton = [[UIButton alloc] initWithFrame:CGRectZero];
-    [_selectButton setImage:tzImagePickerVc.photoDefImage forState:UIControlStateNormal];
+    [_selectButton setImage:tzImagePickerVc.photoPreviewDefImage != nil ? tzImagePickerVc.photoPreviewDefImage: tzImagePickerVc.photoDefImage forState:UIControlStateNormal];
     [_selectButton setImage:tzImagePickerVc.photoSelImage forState:UIControlStateSelected];
     _selectButton.imageView.clipsToBounds = YES;
     _selectButton.imageEdgeInsets = UIEdgeInsetsMake(10, 0, 10, 0);

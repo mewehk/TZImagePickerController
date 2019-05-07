@@ -221,6 +221,7 @@
 @property (nonatomic, strong) UIImage *takePictureImage;
 @property (nonatomic, strong) UIImage *photoSelImage;
 @property (nonatomic, strong) UIImage *photoDefImage;
+@property (nonatomic, strong) UIImage *photoPreviewDefImage;
 @property (nonatomic, strong) UIImage *photoOriginSelImage;
 @property (nonatomic, strong) UIImage *photoOriginDefImage;
 @property (nonatomic, strong) UIImage *photoPreviewOriginDefImage;
