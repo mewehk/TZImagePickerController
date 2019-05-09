@@ -68,7 +68,15 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             self->_player = [AVPlayer playerWithPlayerItem:playerItem];
             self->_playerLayer = [AVPlayerLayer playerLayerWithPlayer:self->_player];
-            self->_playerLayer.frame = self.view.bounds;
+            TZImagePickerController *tzImagePickerVc = (TZImagePickerController *)self.navigationController;
+            if (tzImagePickerVc.videoPreviewCenter) {
+                self->_playerLayer.contentsGravity = kCAGravityResizeAspect;
+                self->_playerLayer.backgroundColor = [UIColor blackColor].CGColor;
+                self->_playerLayer.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width);
+                self->_playerLayer.position = CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height / 2);
+            } else {
+                self->_playerLayer.frame = self.view.bounds;
+            }
             [self.view.layer addSublayer:self->_playerLayer];
             [self addProgressObserver];
             [self configPlayButton];
@@ -93,8 +101,14 @@
 
 - (void)configPlayButton {
     _playButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_playButton setImage:[UIImage tz_imageNamedFromMyBundle:@"MMVideoPreviewPlay"] forState:UIControlStateNormal];
-    [_playButton setImage:[UIImage tz_imageNamedFromMyBundle:@"MMVideoPreviewPlayHL"] forState:UIControlStateHighlighted];
+    TZImagePickerController *tzImagePickerVc = (TZImagePickerController *)self.navigationController;
+    if (tzImagePickerVc.videoPlayButtonImage) {
+        [_playButton setImage:tzImagePickerVc.videoPlayButtonImage forState:UIControlStateNormal];
+    } else {
+        [_playButton setImage:[UIImage tz_imageNamedFromMyBundle:@"MMVideoPreviewPlay"] forState:UIControlStateNormal];
+        [_playButton setImage:[UIImage tz_imageNamedFromMyBundle:@"MMVideoPreviewPlayHL"] forState:UIControlStateHighlighted];
+    }
+
     [_playButton addTarget:self action:@selector(playButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_playButton];
 }
@@ -142,15 +156,21 @@
     
     CGFloat statusBarHeight = [TZCommonTools tz_statusBarHeight];
     CGFloat statusBarAndNaviBarHeight = statusBarHeight + self.navigationController.navigationBar.tz_height;
-    _playerLayer.frame = self.view.bounds;
+    TZImagePickerController *tzImagePickerVc = (TZImagePickerController *)self.navigationController;
+    if (tzImagePickerVc.videoPreviewCenter) {
+        _playerLayer.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width);
+        _playerLayer.position = CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height / 2);
+    } else {
+        _playerLayer.frame = self.view.bounds;
+    }
+
     CGFloat toolBarHeight = [TZCommonTools tz_isIPhoneX] ? 44 + (83 - 49) : 44;
     _toolBar.frame = CGRectMake(0, self.view.tz_height - toolBarHeight, self.view.tz_width, toolBarHeight);
     _doneButton.frame = CGRectMake(self.view.tz_width - 44 - 12, 0, 44, 44);
     _playButton.frame = CGRectMake(0, statusBarAndNaviBarHeight, self.view.tz_width, self.view.tz_height - statusBarAndNaviBarHeight - toolBarHeight);
     
-    TZImagePickerController *tzImagePickerVc = (TZImagePickerController *)self.navigationController;
     if (tzImagePickerVc.videoPreviewPageDidLayoutSubviewsBlock) {
-        tzImagePickerVc.videoPreviewPageDidLayoutSubviewsBlock(_playButton, _toolBar, _doneButton);
+        tzImagePickerVc.videoPreviewPageDidLayoutSubviewsBlock(_playButton, _toolBar, _doneButton, _playerLayer);
     }
 }
 
@@ -204,8 +224,13 @@
     [_player pause];
     _toolBar.hidden = NO;
     [self.navigationController setNavigationBarHidden:NO];
-    [_playButton setImage:[UIImage tz_imageNamedFromMyBundle:@"MMVideoPreviewPlay"] forState:UIControlStateNormal];
-    
+    TZImagePickerController *tzImagePickerVc = (TZImagePickerController *)self.navigationController;
+    if (tzImagePickerVc.videoPlayButtonImage) {
+        [_playButton setImage:tzImagePickerVc.videoPlayButtonImage forState:UIControlStateNormal];
+    } else {
+        [_playButton setImage:[UIImage tz_imageNamedFromMyBundle:@"MMVideoPreviewPlay"] forState:UIControlStateNormal];
+    }
+
     if (self.needShowStatusBar) {
         [UIApplication sharedApplication].statusBarHidden = NO;
     }
