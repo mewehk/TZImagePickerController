@@ -35,6 +35,7 @@
     CGFloat _offsetItemCount;
     
     BOOL _didSetIsSelectOriginalPhoto;
+    NSTimeInterval _viewWillAppearTime; //页面出现的时候时间戳
 }
 @property (nonatomic, assign) BOOL isHideNaviBar;
 @property (nonatomic, strong) UIView *cropBgView;
@@ -76,6 +77,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    _viewWillAppearTime = [[NSDate date] timeIntervalSince1970];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [UIApplication sharedApplication].statusBarHidden = YES;
     if (_currentIndex) {
@@ -92,6 +94,10 @@
         [UIApplication sharedApplication].statusBarHidden = NO;
     }
     [TZImageManager manager].shouldFixOrientation = NO;
+    if (tzImagePickerVc.videoPreviewPageWillDisappear) {
+        NSString *durationTime = [NSString stringWithFormat:@"%.3f",[[NSDate date] timeIntervalSince1970] - _viewWillAppearTime];
+        tzImagePickerVc.videoPreviewPageWillDisappear(durationTime);
+    }
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -298,6 +304,9 @@
     TZImagePickerController *_tzImagePickerVc = (TZImagePickerController *)self.navigationController;
     TZAssetModel *model = _models[self.currentIndex];
     if (!selectButton.isSelected) {
+        if (_tzImagePickerVc.videoPreviewPageDidSelectBlock) {
+            _tzImagePickerVc.videoPreviewPageDidSelectBlock();
+        }
         // 1. select:check if over the maxImagesCount / 选择照片,检查是否超过了最大个数的限制
         if (_tzImagePickerVc.selectedModels.count >= _tzImagePickerVc.maxImagesCount) {
             NSString *title;

@@ -207,6 +207,10 @@
 @property (nonatomic, copy) void (^assetCellDidLayoutSubviewsBlock)(TZAssetCell *cell, UIImageView *imageView, UIImageView *selectImageView, UILabel *indexLabel, UIView *bottomView, UILabel *timeLength, UIImageView *videoImgView);
 @property (nonatomic, copy) void (^albumCellDidLayoutSubviewsBlock)(TZAlbumCell *cell, UIImageView *posterImageView, UILabel *titleLabel);
 
+#pragma mark - 图片预览页相关
+@property (nonatomic, copy) void (^videoPreviewPageDidSelectBlock)(void);
+@property (nonatomic, copy) void (^videoPreviewPageWillDisappear)(NSString *duration);
+
 #pragma mark -
 - (UIAlertController *)showAlertWithTitle:(NSString *)title;
 - (void)hideAlertView:(UIAlertController *)alertView;
