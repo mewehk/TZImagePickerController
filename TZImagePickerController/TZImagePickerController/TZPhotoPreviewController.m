@@ -319,14 +319,13 @@
             return;
             // 2. if not over the maxImagesCount / 如果没有超过最大个数限制
         } else {
-            if (model.type == TZAssetModelMediaTypeVideo && !_tzImagePickerVc.allowPickingMultipleVideo) {
-                [_tzImagePickerVc showAlertWithTitle: @"视频与图片不支持同时选择"];
-                return;
-            }
             [_tzImagePickerVc addSelectedModel:model];
             if (self.photos) {
                 [_tzImagePickerVc.selectedAssets addObject:_assetsTemp[self.currentIndex]];
                 [self.photos addObject:_photosTemp[self.currentIndex]];
+            }
+            if (model.type == TZAssetModelMediaTypeVideo && !_tzImagePickerVc.allowPickingMultipleVideo) {
+                [_tzImagePickerVc showAlertWithTitle:[NSBundle tz_localizedStringForKey:@"Select the video when in multi state, we will handle the video as a photo"]];
             }
         }
     } else {
