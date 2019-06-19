@@ -561,6 +561,7 @@ static CGFloat itemMargin = 5;
         if (tzImagePickerVc.selectedModels.count > 0  && model.type == TZAssetModelMediaTypeVideo) {
             cell.cannotSelectLayerButton.backgroundColor = tzImagePickerVc.cannotSelectLayerColor;
             cell.cannotSelectLayerButton.hidden = NO;
+            [cell.cannotSelectLayerButton addTarget:self action:@selector(clickOnCannotSelectLayerButton) forControlEvents:UIControlEventTouchUpInside];
         }
     }
     
@@ -654,6 +655,13 @@ static CGFloat itemMargin = 5;
         photoPreviewVc.currentIndex = index;
         photoPreviewVc.models = _models;
         [self pushPhotoPrevireViewController:photoPreviewVc];
+    }
+}
+
+- (void)clickOnCannotSelectLayerButton {
+    TZImagePickerController *tzImagePickerVc = (TZImagePickerController *)self.navigationController;
+    if (tzImagePickerVc.photoPickerPageClickDisableBlock) {
+        tzImagePickerVc.photoPickerPageClickDisableBlock();
     }
 }
 

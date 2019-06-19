@@ -194,7 +194,7 @@
 
 /// 【自定义各页面/组件的样式】在界面初始化/组件setModel完成后调用，允许外界修改样式等
 @property (nonatomic, copy) void (^photoPickerPageUIConfigBlock)(UICollectionView *collectionView, UIView *bottomToolBar, UIButton *previewButton, UIButton *originalPhotoButton, UILabel *originalPhotoLabel, UIButton *doneButton, UIImageView *numberImageView, UILabel *numberLabel, UIView *divideLine, UIViewController *photoPicker);
-@property (nonatomic, copy) void (^photoPreviewPageUIConfigBlock)(UICollectionView *collectionView, UIView *naviBar, UIButton *backButton, UIButton *selectButton, UILabel *indexLabel, UIView *toolBar, UIButton *originalPhotoButton, UILabel *originalPhotoLabel, UIButton *doneButton, UIImageView *numberImageView, UILabel *numberLabel, UIViewController *photoPreview);
+@property (nonatomic, copy) void (^photoPreviewPageUIConfigBlock)(UICollectionView *collectionView, UIView *naviBar, UIButton *backButton, UIButton *selectButton, UILabel *indexLabel, UIView *toolBar, UIButton *originalPhotoButton, UILabel *originalPhotoLabel, UIButton *doneButton, UIImageView *numberImageView, UILabel *numberLabel);
 @property (nonatomic, copy) void (^videoPreviewPageUIConfigBlock)(UIButton *playButton, UIView *toolBar, UIButton *doneButton, TZVideoPlayerController *viewController);
 @property (nonatomic, copy) void (^gifPreviewPageUIConfigBlock)(UIView *toolBar, UIButton *doneButton);
 @property (nonatomic, copy) void (^assetCellDidSetModelBlock)(TZAssetCell *cell, UIImageView *imageView, UIImageView *selectImageView, UILabel *indexLabel, UIView *bottomView, UILabel *timeLength, UIImageView *videoImgView);
@@ -207,6 +207,10 @@
 @property (nonatomic, copy) void (^assetCellDidLayoutSubviewsBlock)(TZAssetCell *cell, UIImageView *imageView, UIImageView *selectImageView, UILabel *indexLabel, UIView *bottomView, UILabel *timeLength, UIImageView *videoImgView);
 @property (nonatomic, copy) void (^albumCellDidLayoutSubviewsBlock)(TZAlbumCell *cell, UIImageView *posterImageView, UILabel *titleLabel);
 
+/**
+  照片选择页---选择照片，视频不可点击时
+ */
+@property (nonatomic, copy) void (^photoPickerPageClickDisableBlock)(void);
 #pragma mark - 图片预览页相关
 @property (nonatomic, copy) void (^photoPreviewPageDidSelectBlock)(void);
 @property (nonatomic, copy) void (^photoPreviewPageWillDisappear)(NSString *duration);
