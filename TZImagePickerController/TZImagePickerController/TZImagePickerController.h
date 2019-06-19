@@ -208,8 +208,8 @@
 @property (nonatomic, copy) void (^albumCellDidLayoutSubviewsBlock)(TZAlbumCell *cell, UIImageView *posterImageView, UILabel *titleLabel);
 
 #pragma mark - 图片预览页相关
-@property (nonatomic, copy) void (^videoPreviewPageDidSelectBlock)(void);
-@property (nonatomic, copy) void (^videoPreviewPageWillDisappear)(NSString *duration);
+@property (nonatomic, copy) void (^photoPreviewPageDidSelectBlock)(void);
+@property (nonatomic, copy) void (^photoPreviewPageWillDisappear)(NSString *duration);
 
 #pragma mark -
 - (UIAlertController *)showAlertWithTitle:(NSString *)title;

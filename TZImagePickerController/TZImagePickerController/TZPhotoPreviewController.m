@@ -94,9 +94,9 @@
         [UIApplication sharedApplication].statusBarHidden = NO;
     }
     [TZImageManager manager].shouldFixOrientation = NO;
-    if (tzImagePickerVc.videoPreviewPageWillDisappear) {
+    if (tzImagePickerVc.photoPreviewPageWillDisappear) {
         NSString *durationTime = [NSString stringWithFormat:@"%.3f",[[NSDate date] timeIntervalSince1970] - _viewWillAppearTime];
-        tzImagePickerVc.videoPreviewPageWillDisappear(durationTime);
+        tzImagePickerVc.photoPreviewPageWillDisappear(durationTime);
     }
 }
 
@@ -304,8 +304,8 @@
     TZImagePickerController *_tzImagePickerVc = (TZImagePickerController *)self.navigationController;
     TZAssetModel *model = _models[self.currentIndex];
     if (!selectButton.isSelected) {
-        if (_tzImagePickerVc.videoPreviewPageDidSelectBlock) {
-            _tzImagePickerVc.videoPreviewPageDidSelectBlock();
+        if (_tzImagePickerVc.photoPreviewPageDidSelectBlock) {
+            _tzImagePickerVc.photoPreviewPageDidSelectBlock();
         }
         // 1. select:check if over the maxImagesCount / 选择照片,检查是否超过了最大个数的限制
         if (_tzImagePickerVc.selectedModels.count >= _tzImagePickerVc.maxImagesCount) {
