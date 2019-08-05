@@ -638,8 +638,8 @@ static CGFloat itemMargin = 5;
             [imagePickerVc showAlertWithTitle:[NSBundle tz_localizedStringForKey:@"Can not choose both video and photo"]];
         } else {
             TZImagePickerController *imagePickerVc = (TZImagePickerController *)self.navigationController;
-            if (imagePickerVc.didFinishPickingVideoHandle) {
-                imagePickerVc.didFinishPickingVideoHandle(nil, model.asset);
+            if ([imagePickerVc.pickerDelegate respondsToSelector:@selector(imagePickerController:didFinishPickingVideo:sourceAssets:)]) {
+                [imagePickerVc.pickerDelegate imagePickerController:imagePickerVc didFinishPickingVideo:nil sourceAssets:model.asset];
             }
         }
     } else if (model.type == TZAssetModelMediaTypePhotoGif && tzImagePickerVc.allowPickingGif && !tzImagePickerVc.allowPickingMultipleVideo) {
