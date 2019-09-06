@@ -15,6 +15,7 @@
 @property (nonatomic, assign) NSInteger columnNumber;
 @property (nonatomic, strong) TZAlbumModel *model;
 
+@property (nonatomic, assign) BOOL statusBarHidden;
 /**
  重置状态
  */

@@ -169,7 +169,7 @@ static CGFloat itemMargin = 5;
 }
 
 - (BOOL)prefersStatusBarHidden {
-    return NO;
+    return self.statusBarHidden;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
