@@ -424,7 +424,7 @@
         UILabel *titleLabel = [[UILabel alloc] init];
         titleLabel.font = [UIFont boldSystemFontOfSize:17];
         titleLabel.textColor = [UIColor blackColor];
-        titleLabel.textAlignment = NSTextAlignmentLeft;
+        titleLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:titleLabel];
         _titleLabel = titleLabel;
     }

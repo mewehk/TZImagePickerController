@@ -12,6 +12,10 @@
 @interface TZAssetPreviewCell : UICollectionViewCell
 @property (nonatomic, strong) TZAssetModel *model;
 @property (nonatomic, copy) void (^singleTapGestureBlock)(void);
+//开始向下拖拽和触发向下拖拽和复原的block
+@property (nonatomic, copy) void (^scrollDidDropBlock)(void);
+@property (nonatomic, copy) void (^scrollBeginDropBlock)(void);
+@property (nonatomic, copy) void (^scrollEndDropBlock)(void);
 - (void)configSubviews;
 - (void)photoPreviewCollectionViewDidScroll;
 @end
@@ -45,6 +49,11 @@
 @property (nonatomic, strong) id asset;
 @property (nonatomic, copy) void (^singleTapGestureBlock)(void);
 @property (nonatomic, copy) void (^imageProgressUpdateBlock)(double progress);
+
+//开始向下拖拽和触发向下拖拽和复原的block
+@property (nonatomic, copy) void (^scrollDidDropBlock)(void);
+@property (nonatomic, copy) void (^scrollBeginDropBlock)(void);
+@property (nonatomic, copy) void (^scrollEndDropBlock)(void);
 
 @property (nonatomic, assign) int32_t imageRequestID;
 

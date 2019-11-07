@@ -14,6 +14,9 @@
 #import "TZImageManager.h"
 #import "TZImageCropManager.h"
 
+//余意
+#import "TZBrowserTranslation.h"
+
 @interface TZPhotoPreviewController ()<UICollectionViewDataSource,UICollectionViewDelegate,UIScrollViewDelegate> {
     UICollectionView *_collectionView;
     UICollectionViewFlowLayout *_layout;
@@ -43,12 +46,14 @@
 
 @property (nonatomic, assign) double progress;
 @property (strong, nonatomic) UIAlertController *alertView;
+@property (nonatomic,strong) TZBrowserTranslation *translation;//转场动画管理者
 @end
 
 @implementation TZPhotoPreviewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.transitioningDelegate = self;//转场管理者
     [TZImageManager manager].shouldFixOrientation = YES;
     TZImagePickerController *_tzImagePickerVc = (TZImagePickerController *)self.navigationController;
     if (!_didSetIsSelectOriginalPhoto) {
@@ -210,6 +215,54 @@
     [_collectionView registerClass:[TZPhotoPreviewCell class] forCellWithReuseIdentifier:@"TZPhotoPreviewCell"];
     [_collectionView registerClass:[TZVideoPreviewCell class] forCellWithReuseIdentifier:@"TZVideoPreviewCell"];
     [_collectionView registerClass:[TZGifPreviewCell class] forCellWithReuseIdentifier:@"TZGifPreviewCell"];
+    
+    //平移手势
+    UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
+    [self.view addGestureRecognizer:recognizer];
+    
+}
+
+- (void)handleSwipe:(UIPanGestureRecognizer *)sender
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.currentIndex inSection:0];
+    TZPhotoPreviewCell *cell = (TZPhotoPreviewCell *)[_collectionView cellForItemAtIndexPath:indexPath];
+    if (sender.state == UIGestureRecognizerStateChanged) {
+        CGPoint point = [sender translationInView:self.view];
+        cell.transform = CGAffineTransformMakeTranslation(0, point.y);
+        [self hiddenBar];
+    } else if (sender.state == UIGestureRecognizerStateEnded) {
+        if (cell.tz_top > 150) {
+            [self popWithAnimate];
+        } else {
+            [UIView animateWithDuration:0.5 animations:^{
+                [self showBar];
+                cell.transform = CGAffineTransformIdentity;
+            }];
+        }
+        
+    }
+}
+
+// 隐藏导航栏和工具栏
+- (void)hiddenBar {
+    [UIView animateWithDuration:0.25 animations:^{
+        _naviBar.alpha = 0;
+        _toolBar.alpha = 0;
+    }];
+}
+
+//复原导航栏和工具栏
+- (void)showBar {
+    [UIView animateWithDuration:0.25 animations:^{
+        _naviBar.alpha = 1;
+        _toolBar.alpha = 1;
+    }];
+}
+
+//执行转场动画
+- (void)popWithAnimate {
+    self.navigationController.delegate = self;
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)configCropView {
@@ -392,11 +445,17 @@
         return;
     }
     
-    // 如果没有选中过照片 点击确定时选中当前预览的照片
-    if (_tzImagePickerVc.selectedModels.count == 0 && _tzImagePickerVc.minImagesCount <= 0) {
-        TZAssetModel *model = _models[self.currentIndex];
-        [_tzImagePickerVc addSelectedModel:model];
+//    // 如果没有选中过照片 点击确定时选中当前预览的照片
+//    if (_tzImagePickerVc.selectedModels.count == 0 && _tzImagePickerVc.minImagesCount <= 0) {
+//        TZAssetModel *model = _models[self.currentIndex];
+//        [_tzImagePickerVc addSelectedModel:model];
+//    }
+    
+    //4.22.0假如没有当前照片没有被选中，且照片小于最大数，把数据带过去
+    if (!_selectButton.isSelected && _tzImagePickerVc.selectedModels.count < _tzImagePickerVc.maxImagesCount) {
+        [self select:_selectButton];
     }
+    
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.currentIndex inSection:0];
     TZPhotoPreviewCell *cell = (TZPhotoPreviewCell *)[_collectionView cellForItemAtIndexPath:indexPath];
     if (_tzImagePickerVc.allowCrop && [cell isKindOfClass:[TZPhotoPreviewCell class]]) { // 裁剪状态
@@ -503,6 +562,28 @@
         __strong typeof(weakSelf) strongSelf = weakSelf;
         [strongSelf didTapPreviewCell];
     }];
+    
+    [cell setScrollBeginDropBlock:^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf.isHideNaviBar) {
+            //没有隐藏的时候，隐藏
+            [strongSelf hiddenBar];
+        }
+    }];
+    
+    [cell setScrollDidDropBlock:^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        [strongSelf popWithAnimate];
+    }];
+    
+    [cell setScrollEndDropBlock:^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf.isHideNaviBar) {
+            //没有隐藏的时候，显示
+            [strongSelf showBar];
+        }
+    }];
+    
     return cell;
 }
 
@@ -596,6 +677,23 @@
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskPortrait;
+}
+
+#pragma mark - UIViewControllerTransitioningDelegate
+- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC{
+    if (operation == UINavigationControllerOperationPop) {
+        return self.translation;
+    }
+    return nil;
+}
+
+#pragma mark - 懒加载
+- (TZBrowserTranslation *)translation
+{
+    if (!_translation) {
+        _translation = [[TZBrowserTranslation alloc] init];
+    }
+    return _translation;
 }
 
 @end

@@ -61,6 +61,28 @@
             strongSelf.imageProgressUpdateBlock(progress);
         }
     }];
+    
+    [self.previewView setScrollBeginDropBlock:^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf.scrollBeginDropBlock) {
+            strongSelf.scrollBeginDropBlock();
+        }
+    }];
+    
+    [self.previewView setScrollDidDropBlock:^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf.scrollDidDropBlock) {
+            strongSelf.scrollDidDropBlock();
+        }
+    }];
+    
+    [self.previewView setScrollEndDropBlock:^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf.scrollEndDropBlock) {
+            strongSelf.scrollEndDropBlock();
+        }
+    }];
+    
     [self addSubview:self.previewView];
 }
 
@@ -339,6 +361,29 @@
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
     [self refreshScrollViewContentSize];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    NSLog(@"%f",scrollView.contentOffset.y);
+    if (scrollView.contentOffset.y >= -150  && scrollView.contentOffset.y < -10) {
+        //开始下滑
+        if (self.scrollBeginDropBlock) {
+            self.scrollBeginDropBlock();
+        }
+    }
+    if (scrollView.contentOffset.y < -150) {
+        //触发向下拖拽
+        if (self.scrollDidDropBlock) {
+            self.scrollDidDropBlock();
+        }
+    }
+    
+    if (scrollView.contentOffset.y == 0) {
+        //复原
+        if (self.scrollEndDropBlock) {
+            self.scrollEndDropBlock();
+        }
+    }
 }
 
 #pragma mark - Private
