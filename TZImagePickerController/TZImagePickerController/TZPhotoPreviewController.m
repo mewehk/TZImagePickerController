@@ -451,8 +451,8 @@
 //        [_tzImagePickerVc addSelectedModel:model];
 //    }
     
-    //4.22.0假如没有当前照片没有被选中，且照片小于最大数，把数据带过去
-    if (!_selectButton.isSelected && _tzImagePickerVc.selectedModels.count < _tzImagePickerVc.maxImagesCount) {
+    //4.22.0假如没有当前照片没有被选中，且照片为0，把数据带过去
+    if (!_selectButton.isSelected && _tzImagePickerVc.selectedModels.count == 0) {
         [self select:_selectButton];
     }
     
