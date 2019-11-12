@@ -625,7 +625,7 @@
 
 - (void)dealloc {
     // NSLog(@"%@ dealloc",NSStringFromClass(self.class));
-    [[NSNotificationCenter defaultCenter] removeObserver:self]
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)refreshNaviBarAndBottomBarState {
