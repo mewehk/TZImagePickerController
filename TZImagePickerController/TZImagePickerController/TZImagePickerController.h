@@ -214,6 +214,8 @@
 #pragma mark - 图片预览页相关
 @property (nonatomic, copy) void (^photoPreviewPageDidSelectBlock)(void);
 @property (nonatomic, copy) void (^photoPreviewPageWillDisappear)(NSString *duration);
+#pragma mark - 图片选择页访问埋点回调
+@property (nonatomic, copy) void (^photoPickerControllerWillDisappear)(NSString *duration);
 
 #pragma mark -
 - (UIAlertController *)showAlertWithTitle:(NSString *)title;

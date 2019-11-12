@@ -68,8 +68,6 @@
     [self configBottomToolBar];
     self.view.clipsToBounds = YES;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeStatusBarOrientationNotification:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActiveNotification:) name:UIApplicationWillResignActiveNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActiveNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)setIsSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto {
@@ -105,6 +103,18 @@
         NSString *durationTime = [NSString stringWithFormat:@"%.3f",[[NSDate date] timeIntervalSince1970] - _viewWillAppearTime];
         tzImagePickerVc.photoPreviewPageWillDisappear(durationTime);
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActiveNotification:) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActiveNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -625,7 +635,6 @@
 
 - (void)dealloc {
     // NSLog(@"%@ dealloc",NSStringFromClass(self.class));
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)refreshNaviBarAndBottomBarState {

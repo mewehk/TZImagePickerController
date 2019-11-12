@@ -35,6 +35,7 @@
     BOOL _showTakePhotoBtn;
     
     CGFloat _offsetItemCount;
+    NSTimeInterval _viewWillAppearTime; //页面出现的时候时间戳
 }
 @property CGRect previousPreheatRect;
 @property (nonatomic, assign) BOOL isSelectOriginalPhoto;
@@ -225,7 +226,15 @@ static CGFloat itemMargin = 5;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    // [self updateCachedAssets];
+    _viewWillAppearTime = [[NSDate date] timeIntervalSince1970];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActiveNotification:) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActiveNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)configBottomToolBar {
@@ -380,6 +389,19 @@ static CGFloat itemMargin = 5;
 - (void)didChangeStatusBarOrientationNotification:(NSNotification *)noti {
     _offsetItemCount = _collectionView.contentOffset.y / (_layout.itemSize.height + _layout.minimumLineSpacing);
 }
+
+- (void)willResignActiveNotification:(NSNotification *)noti {
+    TZImagePickerController *_tzImagePickerVc = (TZImagePickerController *)self.navigationController;
+     if (_tzImagePickerVc.photoPreviewPageWillDisappear) {
+        NSString *durationTime = [NSString stringWithFormat:@"%.3f",[[NSDate date] timeIntervalSince1970] - _viewWillAppearTime];
+        _tzImagePickerVc.photoPickerControllerWillDisappear(durationTime);
+    }
+}
+
+- (void)didBecomeActiveNotification:(NSNotification *)noti {
+    _viewWillAppearTime = [[NSDate date] timeIntervalSince1970];
+}
+
 
 #pragma mark - Click Event
 - (void)navLeftBarButtonClick{
