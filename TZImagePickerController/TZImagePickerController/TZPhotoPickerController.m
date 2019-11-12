@@ -392,7 +392,7 @@ static CGFloat itemMargin = 5;
 
 - (void)willResignActiveNotification:(NSNotification *)noti {
     TZImagePickerController *_tzImagePickerVc = (TZImagePickerController *)self.navigationController;
-     if (_tzImagePickerVc.photoPreviewPageWillDisappear) {
+     if (_tzImagePickerVc.photoPickerControllerWillDisappear) {
         NSString *durationTime = [NSString stringWithFormat:@"%.3f",[[NSDate date] timeIntervalSince1970] - _viewWillAppearTime];
         _tzImagePickerVc.photoPickerControllerWillDisappear(durationTime);
     }
