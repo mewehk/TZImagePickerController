@@ -236,9 +236,11 @@
         if (cell.tz_top > 150) {
             [self popWithAnimate];
         } else {
-            [UIView animateWithDuration:0.5 animations:^{
-                [self showBar];
+            [self showBar];
+            [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
                 cell.transform = CGAffineTransformIdentity;
+            } completion:^(BOOL finished) {
+                
             }];
         }
         
