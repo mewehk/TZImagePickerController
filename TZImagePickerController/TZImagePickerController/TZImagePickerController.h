@@ -207,6 +207,10 @@
 @property (nonatomic, copy) void (^assetCellDidLayoutSubviewsBlock)(TZAssetCell *cell, UIImageView *imageView, UIImageView *selectImageView, UILabel *indexLabel, UIView *bottomView, UILabel *timeLength, UIImageView *videoImgView);
 @property (nonatomic, copy) void (^albumCellDidLayoutSubviewsBlock)(TZAlbumCell *cell, UIImageView *posterImageView, UILabel *titleLabel);
 
+
+/// 图片预览页访问时长埋点
+@property (nonatomic, copy) void (^photoPreviewControllerWillResignActiveBlock)(void);
+@property (nonatomic, copy) void (^photoPreviewControllerDidBecomeActiveBlock)(void);
 /**
   照片选择页---选择照片，视频不可点击时
  */

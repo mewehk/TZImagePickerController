@@ -68,6 +68,8 @@
     [self configBottomToolBar];
     self.view.clipsToBounds = YES;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeStatusBarOrientationNotification:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActiveNotification:) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActiveNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)setIsSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto {
@@ -351,6 +353,21 @@
     _offsetItemCount = _collectionView.contentOffset.x / _layout.itemSize.width;
 }
 
+- (void)willResignActiveNotification:(NSNotification *)noti {
+    TZImagePickerController *_tzImagePickerVc = (TZImagePickerController *)self.navigationController;
+    if (_tzImagePickerVc.photoPreviewControllerWillResignActiveBlock) {
+        _tzImagePickerVc.photoPreviewControllerWillResignActiveBlock();
+    }
+}
+
+- (void)didBecomeActiveNotification:(NSNotification *)noti {
+    TZImagePickerController *_tzImagePickerVc = (TZImagePickerController *)self.navigationController;
+    if (_tzImagePickerVc.photoPreviewControllerDidBecomeActiveBlock) {
+        _tzImagePickerVc.photoPreviewControllerDidBecomeActiveBlock();
+    }
+}
+
+
 #pragma mark - Click Event
 
 - (void)select:(UIButton *)selectButton {
@@ -608,6 +625,7 @@
 
 - (void)dealloc {
     // NSLog(@"%@ dealloc",NSStringFromClass(self.class));
+    [[NSNotificationCenter defaultCenter] removeObserver:self]
 }
 
 - (void)refreshNaviBarAndBottomBarState {
