@@ -355,16 +355,14 @@
 
 - (void)willResignActiveNotification:(NSNotification *)noti {
     TZImagePickerController *_tzImagePickerVc = (TZImagePickerController *)self.navigationController;
-    if (_tzImagePickerVc.photoPreviewControllerWillResignActiveBlock) {
-        _tzImagePickerVc.photoPreviewControllerWillResignActiveBlock();
+     if (_tzImagePickerVc.photoPreviewPageWillDisappear) {
+        NSString *durationTime = [NSString stringWithFormat:@"%.3f",[[NSDate date] timeIntervalSince1970] - _viewWillAppearTime];
+        _tzImagePickerVc.photoPreviewPageWillDisappear(durationTime);
     }
 }
 
 - (void)didBecomeActiveNotification:(NSNotification *)noti {
-    TZImagePickerController *_tzImagePickerVc = (TZImagePickerController *)self.navigationController;
-    if (_tzImagePickerVc.photoPreviewControllerDidBecomeActiveBlock) {
-        _tzImagePickerVc.photoPreviewControllerDidBecomeActiveBlock();
-    }
+    _viewWillAppearTime = [[NSDate date] timeIntervalSince1970];
 }
 
 
