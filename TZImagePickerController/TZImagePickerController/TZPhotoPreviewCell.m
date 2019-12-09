@@ -365,13 +365,14 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     NSLog(@"%f",scrollView.contentOffset.y);
-    if (scrollView.contentOffset.y >= -150  && scrollView.contentOffset.y < -10) {
+    CGFloat offsetY = -150 - scrollView.contentInset.top;
+    if (scrollView.contentOffset.y >= offsetY  && scrollView.contentOffset.y < -10) {
         //开始下滑
         if (self.scrollBeginDropBlock) {
             self.scrollBeginDropBlock();
         }
     }
-    if (scrollView.contentOffset.y < -150) {
+    if (scrollView.contentOffset.y < offsetY) {
         //触发向下拖拽
         if (self.scrollDidDropBlock) {
             self.scrollDidDropBlock();

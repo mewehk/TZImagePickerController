@@ -591,11 +591,6 @@
     }];
     
     [cell setScrollBeginDropBlock:^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf.isHideNaviBar) {
-            //没有隐藏的时候，隐藏
-            [strongSelf hiddenBar];
-        }
     }];
     
     [cell setScrollDidDropBlock:^{
@@ -604,11 +599,6 @@
     }];
     
     [cell setScrollEndDropBlock:^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf.isHideNaviBar) {
-            //没有隐藏的时候，显示
-            [strongSelf showBar];
-        }
     }];
     
     return cell;
