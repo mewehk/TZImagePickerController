@@ -679,6 +679,9 @@ static CGFloat itemMargin = 5;
         photoPreviewVc.models = _models;
         [self pushPhotoPrevireViewController:photoPreviewVc];
     }
+    if (tzImagePickerVc.photoCollectionDidTapItem) {
+        tzImagePickerVc.photoCollectionDidTapItem(model);
+    }
 }
 
 - (void)clickOnCannotSelectLayerButton {
