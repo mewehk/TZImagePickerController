@@ -272,6 +272,15 @@
     if (_imageContainerView.tz_height > self.tz_height && _imageContainerView.tz_height - self.tz_height <= 1) {
         _imageContainerView.tz_height = self.tz_height;
     }
+    
+    // 产品要求图片默认充满裁剪域
+    if (0<_imageContainerView.tz_height && _imageContainerView.tz_height<self.cropRect.size.height){
+        _imageContainerView.tz_width = _imageContainerView.tz_width*(self.cropRect.size.height/_imageContainerView.tz_height);
+        _imageContainerView.tz_height = self.cropRect.size.height;
+        _imageContainerView.tz_centerY = self.tz_height / 2;
+        _imageContainerView.tz_centerX = self.tz_width / 2;
+    }
+    
     CGFloat contentSizeH = MAX(_imageContainerView.tz_height, self.tz_height);
     _scrollView.contentSize = CGSizeMake(self.scrollView.tz_width, contentSizeH);
     [_scrollView scrollRectToVisible:self.bounds animated:NO];
