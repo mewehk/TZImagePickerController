@@ -870,8 +870,11 @@ static CGFloat itemMargin = 5;
         UIImage *photo = [info objectForKey:UIImagePickerControllerOriginalImage];
         if (photo) {
             [[TZImageManager manager] savePhotoWithImage:photo location:self.location completion:^(PHAsset *asset, NSError *error){
-                if (!error) {
+                if (!error && asset) {
                     [self addPHAsset:asset];
+                } else {
+                    TZImagePickerController *tzImagePickerVc = (TZImagePickerController *)self.navigationController;
+                    [tzImagePickerVc hideProgressHUD];
                 }
             }];
             self.location = nil;
