@@ -41,6 +41,7 @@
         // Set the cell's thumbnail image if it's still showing the same asset.
         if ([self.representedAssetIdentifier isEqualToString:model.asset.localIdentifier]) {
             self.imageView.image = photo;
+            [self setNeedsLayout];
         } else {
             // NSLog(@"this cell is showing other asset");
             [[PHImageManager defaultManager] cancelImageRequest:self.imageRequestID];
@@ -377,6 +378,7 @@
     self.titleLabel.attributedText = nameString;
     [[TZImageManager manager] getPostImageWithAlbumModel:model completion:^(UIImage *postImage) {
         self.posterImageView.image = postImage;
+        [self setNeedsLayout];
     }];
     if (model.selectedCount) {
         self.selectedCountButton.hidden = NO;
