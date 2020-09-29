@@ -801,7 +801,15 @@ static CGFloat itemMargin = 5;
     }];
     [photoPreviewVc setDoneButtonClickBlockCropMode:^(UIImage *cropedImage, id asset) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        [strongSelf didGetAllPhotos:@[cropedImage] assets:@[asset] infoArr:nil];
+        NSArray *photos = @[];
+        if (cropedImage != nil) {
+            photos = @[cropedImage];
+        }
+        NSArray *assets = @[]
+        if (asset != nil) {
+            assets = @[asset];
+        }
+        [strongSelf didGetAllPhotos:photos assets:assets infoArr:nil];
     }];
     [self.navigationController pushViewController:photoPreviewVc animated:YES];
 }
