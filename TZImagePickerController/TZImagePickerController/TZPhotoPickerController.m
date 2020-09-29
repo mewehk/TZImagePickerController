@@ -805,7 +805,7 @@ static CGFloat itemMargin = 5;
         if (cropedImage != nil) {
             photos = @[cropedImage];
         }
-        NSArray *assets = @[]
+        NSArray *assets = @[];
         if (asset != nil) {
             assets = @[asset];
         }
