@@ -113,7 +113,7 @@ static dispatch_once_t onceToken;
         // 有可能是PHCollectionList类的的对象，过滤掉
         if (![collection isKindOfClass:[PHAssetCollection class]]) continue;
         // 过滤空相册
-        if (collection.estimatedAssetCount <= 0) continue;
+        if ((collection.estimatedAssetCount <= 0) && collection.estimatedAssetCount != NSNotFound) continue;
         if ([self isCameraRollAlbum:collection]) {
             PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
             model = [self modelWithResult:fetchResult name:collection.localizedTitle isCameraRoll:YES needFetchAssets:needFetchAssets];
@@ -145,7 +145,7 @@ static dispatch_once_t onceToken;
             // 有可能是PHCollectionList类的的对象，过滤掉
             if (![collection isKindOfClass:[PHAssetCollection class]]) continue;
             // 过滤空相册
-            if (collection.estimatedAssetCount <= 0 && ![self isCameraRollAlbum:collection]) continue;
+            if (collection.estimatedAssetCount <= 0 && ![self isCameraRollAlbum:collection] && (collection.estimatedAssetCount != NSNotFound)) continue;
             PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
             if (fetchResult.count < 1 && ![self isCameraRollAlbum:collection]) continue;
             
@@ -344,6 +344,9 @@ static dispatch_once_t onceToken;
 }
 
 - (PHImageRequestID)getPhotoWithAsset:(PHAsset *)asset photoWidth:(CGFloat)photoWidth completion:(void (^)(UIImage *photo,NSDictionary *info,BOOL isDegraded))completion progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler networkAccessAllowed:(BOOL)networkAccessAllowed {
+    if (asset == nil) {
+        return PHInvalidImageRequestID;
+    }
     CGSize imageSize;
     if (photoWidth < TZScreenWidth && photoWidth < _photoPreviewMaxWidth) {
         imageSize = AssetGridThumbnailSize;
